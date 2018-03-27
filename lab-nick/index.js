@@ -1,6 +1,7 @@
 'use strict';
 
 require('dotenv').config();
+require('mongoose').connect(process.env.MONGODB_URI);
 
 const express = require('express');
 const app = express();
