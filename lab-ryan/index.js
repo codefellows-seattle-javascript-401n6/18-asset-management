@@ -1,27 +1,31 @@
 'use strict';
 
-const fs = require('fs');
-const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+require('dotenv').config();
 
-const express = require('express');
-const multer = require('multer');
-const upload = multer({dest: 'uploads/'});
+// const fs = require('fs');
+// const AWS = require('aws-sdk');
+// const s3 = new AWS.S3();
 
-const app = express();
-app.use(express.static('static'));
+const express = require('express'); 
+const multer = require('multer'); 
+// const upload = multer({dest: 'uploads/'});
 
-const photosRouter = require('./router/photos.js');
-app.use()
+const app = express(); 
+app.use(express.static('static')); 
 
-app.get('/', (req, res) => {
+// const photosRouter = require('./router/photos.js');
+// app.use();
+
+app.get('/', (req, res) => { 
     res.sendFile('index.html');
 });
 
-app.post('/photos/uploads', upload.single('picture'), (req, res) => {
-    console.log('GOT', req.file);
-    res.send(req.file);
-});
+// app.post('/photos/uploads', upload.single('picture'), (req, res) => {
+//     console.log('GOT', req.file);
+//     res.send(req.file);
+// });
 
 
-app.listen(PORT, () => console.log('listening on: http://localhost', PORT));
+app.listen(process.env.PORT, () => {
+    console.log('http://localhost:' + process.env.PORT)
+})
