@@ -5,11 +5,13 @@ require('dotenv').config();
 require('mongoose').connect(process.env.MONGODB_URI);
 
 const express = require('express'); 
+const PORT = process.env.PORT;
 const app = express();
+
 app.use(express.static('static'));
 
 const photosRouter = require('./routes/photos.js');
-app.use('/photos', photosRouter);
+app.use('/api/photos', photosRouter);
 
 app.get('/', (req, res) => { 
     res.sendFile('index.html');
