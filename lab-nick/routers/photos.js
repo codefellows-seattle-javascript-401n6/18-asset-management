@@ -21,26 +21,30 @@ router.get('/', (req, res) => {
 
 router.post('/upload', upload.single('polaroid'), (req, res) => {
   console.log('GOT', req.file);
-
-  let ext = path.extname(req.file.originalname);
+  
+  // let path = req.file.path;
+  // let ext = path.extname(req.file.originalname);
+  // console.log('EXT', ext);
   let params = {
     ACL: 'public-read',
     Bucket: process.env.AWS_BUCKET,
-    Key: `${req.file.originalname}${ext}`,
+    Key: req.file.originalname,
+    // Key: `${req.file.originalname}${ext}`,
     Body: fs.createReadStream(req.file.path)
   };
 
   console.log('uploading....');
+  console.log('s3', s3);
   s3.upload(params, (err, s3Data) => {
     if(err) {
       console.error(err);
-      res.setStatus(500);
+      // res.setstatus(500);
     } else {
       res.send(s3Data);
       // create a photo model and store Location aka url
     };
     console.log('uploaded!');
-    let pola = new Polaroid({ url: s3Data.Location });
+    let pola = new Polaroid({url: s3Data.Location});
     pola.save()
       .then((pola) => {
         console.log('saved', pola);
