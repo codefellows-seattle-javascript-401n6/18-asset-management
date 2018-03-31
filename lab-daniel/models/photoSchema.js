@@ -6,6 +6,6 @@ const photoSchema = new mongoose.Schema({
     description: String,
     url: String,
 });
-const Upload = mongoose.model('Upload', photoSchema);
+const FileUpload = mongoose.model('FileUpload', photoSchema);
 
-module.exports = Upload;
+module.exports = FileUpload;
