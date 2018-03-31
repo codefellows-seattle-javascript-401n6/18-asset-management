@@ -9,9 +9,11 @@
 <body>
     <h1>Hi! Welcome to Uploadville. Your Gateway to AWS!</h1>
     <h2>Feel free to upload your files below</h2>
-    <input type="text" name="title" placeholder="title"/>
-    <input type="file" name="picture" />
-    <input type="submit" />
+
+    <form action="/photos/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="information" />
+        <input type="submit" />
+    </form>
     
 </body>
 </html>
