@@ -1,25 +1,26 @@
 'use strict';
 
 require('dotenv').config();
+
 const fs = require('fs');
 
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 
 const express = require('express');
-const router = express.Router();
+const router = new express.Router();
 
 const path = require('path');
 
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/'});
 
-const Picture = require('../models/pictures.js')
+const Picture = require('../models/picture.js')
 
 router.get('/', (req, res) => {
     if(req.query.id){
-        Post.findOne({_id: req.query.id}, (err, Picture) => {
-           res.send(picture);
+        Picture.findOne({_id: req.query.id}, (err, picture) => {
+            res.send(picture);
         });
     } else {
         Picture.find()
@@ -27,15 +28,10 @@ router.get('/', (req, res) => {
             res.send(picture);
         });
     }
-    // Picture.find({})
-    // .then((pic) => {
-    //     res.send(pic);
-    // });
 });
 
-router.post('/upload', upload.single('picture'), function (req, res, next) {
-   console.log(req.file);
-
+router.post('/upload', upload.single('picture'), (req, res, next) => {
+   console.log('GOT', req.file);
    let ext = path.extname(req.file.originalname);
 
    let params = {
@@ -45,7 +41,9 @@ router.post('/upload', upload.single('picture'), function (req, res, next) {
        Key: req.file.originalname,
        Body: fs.createReadStream(req.file.path)
    };
+   console.log('uploading...');
    s3.upload(params, (err, s3Data) => {
+       console.log('uploaded', s3Data);
        let pic = new Picture({
            title: req.body.title,
            content: req.body.content,
@@ -53,6 +51,7 @@ router.post('/upload', upload.single('picture'), function (req, res, next) {
        });
        pic.save()
        .then((pic) => {
+           console.log('saved', pic);
            res.send(pic);
        });
    });                                                                                                                                          

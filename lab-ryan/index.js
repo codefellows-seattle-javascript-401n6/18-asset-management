@@ -1,8 +1,8 @@
 'use strict';
 
 require('dotenv').config();
-const express = require('express');
 
+const express = require('express');
 const app = express();
 app.use(express.static('static'));
 
@@ -13,7 +13,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 
-const pictureRouter = require('./routes/photos.js');
+const pictureRouter = require('./routes/pictures.js');
 app.use('/api/pictures', pictureRouter);
 
 app.get('/', (req, res) => { 
