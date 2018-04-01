@@ -8,6 +8,7 @@ const router = new express.Router();
 const multer = require('multer');
 const upload = multer({ dest: 'uploads/' });
 const fs = require('fs');
+const Photo = require('../models/photo-model');
 
 // router.get('/', (req, res) => {
   
@@ -22,8 +23,14 @@ router.post('/upload', upload.single('picture'), (req, res) => {
     Body: fs.createReadStream(req.file.path)
   };
   s3.upload(params, (err, s3Data) => {
+    new Photo({
+      url: s3Data.Location
+    })
+      .save()
+      .then(photo => {
+        res.send(photo);
+      });
 
-    res.send(s3Data);
   });
 });
 
