@@ -1,16 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Picture Bucket</title>
 </head>
-<body>
+
+<body bgcolor="#a0b0a3">
     <h1>Welcome to our Picture Bucket</h1>
+
     <form action="/api/pictures" method="POST" enctype="multipart/form-data">
-        <input type="file" name="picture" />
-        <input type="submit" />
-    </form>
+        <p>
+                <input type="file" name="picture" />
+            </p>
+            <p>
+                <input type="submit" name="Submit"/>
+            </p>
+        </form>
+
 </body>
+
 </html>
