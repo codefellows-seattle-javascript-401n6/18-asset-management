@@ -1,32 +1,57 @@
 'use strict';
 
-require('dotenv').config();
+require('dotenv').config({path: '../.env'});
 
 const superagent = require('superagent');
+const picture = require('../models/picture.js');
 
-const picture = require('../router/pictures.js');
+describe('S3 Uploads', () => {
 
-describe('picture route', () => {
-    it('test that the upload worked and a resource object is returned', (done) => {
-            let pictureParams = params();
-        
-            superagent.post(SIGNUP_URL)
-            .set('Content-Type', 'application/json')
-            .send(pictureParams)
-            .then(res => {
-              expect(res.status).toEqual(200);
-              done();
-            });
-          });
+  it('upload worked and a resource object is returned', (done) => {
+    let imageLocation = '../uploads/line.jpg';
+    let uploadUrl = 'http://localhost:3000/api/pictures';
 
-    it('returns all the resources that have been uploaded', (done) => {
-        
-    })
-
-    it('returns info on one resource that\'s been uploaded', (done) => {
-        
+    superagent.post(uploadUrl)
+    .attach('picture', imageLocation)
+    .end((err, res) => {
+      let amazonUrl = process.env.AWS_BUCKET + '.s3.us-west-2.amazonaws.com';
+      console.log('RES.BODY', res.body.imageUrl);
+        console.log('amazonUrl', amazonUrl);
+      let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
+        expect(isAmazonUrl).toBe(true);
+        expect(res.status).toBe(200);
+        expect(res.body.imageUrl).toBeTruthy();
+      done();
     });
+  });
+
+  it('returns a list of all resources that have been uploaded', done => {
+    let imageLocation = '../uploads/line.jpg';
+    let uploadUrl = 'http://localhost:3000/api/pictures';
+    console.log('uploadUrl', uploadUrl);
+    console.log('imageLocation', imageLocation);
+
+    superagent.post(uploadUrl)
+      .attach('picture', imageLocation)
+      .end((err, res) => {
+        let amazonUrl = process.env.AWS_BUCKET + '.s3.amazonaws.com';
+        let isAmazonUrl = res.body.imageUrl.includes(amazonUrl);
+        // expect(isAmazonUrl).toBe(true);
+        expect(res.status).toBeTruthy();
+        done();
+      });
+  });
+
+  it('returns info on one resource thats been uploaded', done => {
+    let restUrl = 'http://localhost:3000/api/pictures';
+    superagent.get(restUrl)
+      .end((err, res) => {
+        expect(res.status).toBe(200);
+        done();
+      });
+  });
 });
+
 
 
 

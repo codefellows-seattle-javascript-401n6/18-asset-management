@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 mongoose.connect(process.env.MONGODB_URI);
 
 const pictureRouter = require('./routes/pictures.js');
-app.use('/api/pictures', pictureRouter);
+app.use('/api', pictureRouter);
 
 app.get('/', (req, res) => { 
     res.sendFile('index.html');

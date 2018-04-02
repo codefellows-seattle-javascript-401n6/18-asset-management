@@ -17,7 +17,7 @@ const upload = multer({ dest: 'uploads/'});
 
 const Picture = require('../models/picture.js')
 
-router.get('/', (req, res) => {
+router.get('/pictures', (req, res) => {
     if(req.query.id){
         Picture.findOne({_id: req.query.id}, (err, picture) => {
             res.send(picture);
@@ -30,8 +30,9 @@ router.get('/', (req, res) => {
     }
 });
 
-router.post('/upload', upload.single('picture'), (req, res, next) => {
+router.post('/pictures', upload.single('picture'), (req, res, next) => {
    console.log('GOT', req.file);
+
    let ext = path.extname(req.file.originalname);
 
    let params = {
