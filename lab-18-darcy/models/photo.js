@@ -7,5 +7,8 @@ const photoSchema = new mongoose.Schema({
   URL: String
 });
 
-const Photo = new mongoose.Model('Photo', photoSchema);
+// console.log('photoSchema= ', photoSchema);
+
+const Photo = mongoose.model('Photo', photoSchema);
+
 module.exports = Photo;
