@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const photoSchema = new mongoose.Schema({
     name: String,
     description: String,
-    url: String,
+    url: String
 });
 const FileUpload = mongoose.model('FileUpload', photoSchema);
 

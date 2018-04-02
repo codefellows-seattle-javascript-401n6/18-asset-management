@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config();
 const express = require('express');
 const router = new express.Router();
 const fs = require('fs');
@@ -15,38 +16,38 @@ const s3 = new AWS.S3()
 router.get('/', (req, res) => {
     if (req.query.id) {
         FileUpload.findOne({_id: req.query.id}, (err, data) => {
-          res.send(data);
+            res.send(data);
         })
       } else{
         FileUpload.find()
             .then(data => {
                 res.send(data);
-        })
-    }
-})
+        });
+    };
+});
 
 
 //POST ROUTE
 router.post('/upload', upload.single('information'), (req, res, next) => {
     let params = {
         ACL: 'public-read',
-        Bucket: process.env.AWS_BUCKET,
         Key: req.file.originalname,
+        Bucket: process.env.AWS_BUCKET,
         Body: fs.createReadStream(req.file.path)
-    };
+    }
 
     s3.upload(params, (err, s3Data) => {
         let fileUpload = new FileUpload({ 
             name: req.body.name,
-            description: req.body.url,
+            description: req.body.description,
             url: req.body.url 
         })
         fileUpload.save()
-        .then(fileUpload => {
-            res.send(fileUpload);
+        .then(s3Data => {
+            res.send(s3Data);
         });
     });
 });
 
 
-module.exports = router
+module.exports = router;
